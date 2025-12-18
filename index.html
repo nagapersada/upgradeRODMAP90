@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>ROADMAP PRO JUTAWAN</title>
+
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) { registration.unregister(); } 
+            });
+            caches.keys().then(function(names) {
+                for (let name of names) caches.delete(name);
+            });
+        }
+    </script>
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --bg: #000000;
+            --card-bg: #121212;
+            --border: #333;
+            --text: #ffffff;
+            --green: #00e676;
+            --red: #ff5252;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg); color: var(--text);
+            margin: 0; padding: 0; height: 100dvh;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* --- HALAMAN (PAGE SECTIONS) --- */
+        .page-section {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; background: #000;
+            overflow-y: auto; padding-bottom: 80px; z-index: 10;
+        }
+        .page-section.active { display: flex; z-index: 20; }
+
+        /* --- SPLASH SCREEN (FIXED) --- */
+        #page-splash {
+            z-index: 9999; justify-content: center; align-items: center; text-align: center;
+            background: #000;
+        }
+        .splash-logo { width: 120px; height: auto; margin-bottom: 20px; }
+        
+        /* TOMBOL ANTI RAKSASA (FIXED SIZE) */
+        .btn-start {
+            background: linear-gradient(135deg, var(--gold), #8f7215);
+            color: #000; border: none; 
+            width: 200px !important; /* KUNCI UKURAN */
+            height: 50px !important; /* KUNCI TINGGI */
+            border-radius: 50px; font-weight: 800; font-size: 1rem;
+            cursor: pointer; margin-top: 30px; text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+            flex: none; /* MENCEGAH MELAR */
+        }
+
+        /* HEADER & CONTENT */
+        header {
+            padding: 15px 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); flex-shrink: 0;
+        }
+        .brand { font-weight: 800; color: var(--gold); letter-spacing: 1px; font-size: 1.1rem; }
+        .content-area { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 15px; }
+
+        /* FORM INPUTS */
+        .form-box { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-top: 20px; }
+        .inp-group { margin-bottom: 15px; }
+        .inp-label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+        .inp-field { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-size: 1.1rem; text-align: center; font-weight: bold; }
+
+        /* CARDS */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: var(--card-bg); border: 1px solid #222; padding: 15px; border-radius: 12px; }
+        .card.gold { border-color: var(--gold); }
+        .lbl { font-size: 0.65rem; color: #888; text-transform: uppercase; }
+        .val { font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 5px; }
+        .sub { font-size: 0.75rem; color: var(--gold); margin-top: 2px; }
+
+        /* LOGS */
+        .log-list { display: flex; flex-direction: column; gap: 8px; }
+        .log-item { display: flex; align-items: center; padding: 12px; background: #0a0a0a; border-radius: 10px; border-left: 3px solid #333; }
+        .log-item.up { border-left-color: var(--gold); background: rgba(212,175,55,0.08); }
+        .log-item.down { border-left-color: var(--red); }
+        .log-day { width: 40px; font-weight: 800; color: #666; font-size: 0.9rem; }
+        .log-desc { flex: 1; }
+        .log-main { font-size: 0.9rem; font-weight: bold; color: #fff; }
+        .log-sub { font-size: 0.75rem; color: #888; }
+        .log-amt { font-weight: bold; color: var(--gold); font-size: 0.9rem; }
+
+        /* FOOTER */
+        .footer-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #000; border-top: 1px solid #222;
+            padding: 15px; display: flex; gap: 10px; z-index: 100;
+        }
+        .btn-main { flex: 1; background: var(--gold); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1rem; text-transform: uppercase; cursor: pointer; }
+        .btn-sec { width: 50px; background: #222; color: #fff; border: 1px solid #333; border-radius: 12px; font-size: 1.2rem; cursor: pointer; }
+
+        /* CENTER TEXT */
+        .center-mode { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; }
+        .big-title { font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
+        .desc-text { color: #ccc; font-size: 0.9rem; line-height: 1.6; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="DVTMNP-PRO(2).mp3" loop playsinline></audio>
+
+    <div id="page-splash" class="page-section active">
+        <img src="logo.png" class="splash-logo" onerror="this.style.display='none'">
+        <h1 style="color:var(--gold); margin:0; font-size:1.8rem;">ROADMAP 90H</h1>
+        <p style="color:#666; font-size:0.9rem;">SIMULASI JUTAWAN</p>
+        <button class="btn-start" onclick="openSetup()">MULAI</button>
+    </div>
+
+    <div id="page-setup" class="page-section">
+        <header><div class="brand">PENGATURAN</div></header>
+        <div class="content-area">
+            <div class="form-box">
+                <div class="inp-group"><label class="inp-label">Saldo Awal (USDT)</label><input type="number" id="inpStartBal" class="inp-field" value="100"></div>
+                <div class="inp-group"><label class="inp-label">Profit/Sinyal (%)</label><input type="number" id="inpProfit" class="inp-field" value="0.85" step="0.01"></div>
+                <div class="inp-group"><label class="inp-label">Kurs IDR</label><input type="number" id="inpKurs" class="inp-field" value="16000"></div>
+            </div>
+        </div>
+        <div class="footer-bar"><button class="btn-main" onclick="startApp()">SIMPAN & LANJUT</button></div>
+    </div>
+
+    <div id="page-dashboard" class="page-section">
+        <header>
+            <div class="brand">HARI KE-<span id="uiDay">0</span></div>
+            <div style="text-align:right"><div style="font-size:0.7rem; color:#666">KURS IDR</div><div style="font-size:0.9rem; font-weight:bold; color:var(--green)" id="uiKursTop">Rp 16.000</div></div>
+        </header>
+        <div class="content-area">
+            <div class="stats-grid">
+                <div class="card gold"><div class="lbl">SALDO AKUN</div><div class="val" id="uiBal">100.00</div><div class="sub" id="uiBalIDR">Rp 1.600.000</div></div>
+                <div class="card"><div class="lbl">SINYAL / HARI</div><div class="val" id="uiSig">2x</div><div class="sub" id="uiRank" style="color:var(--green)">MEMBER</div></div>
+            </div>
+            <div style="background:#111; padding:10px; border-radius:8px; border:1px solid #333; text-align:center; font-size:0.85rem; color:#fff;" id="uiPhase">Fase Awal</div>
+            <div style="margin-top:10px; border-bottom:1px solid #333; padding-bottom:5px; color:#888; font-size:0.75rem; font-weight:bold;">RIWAYAT PERJALANAN</div>
+            <div class="log-list" id="logList"></div>
+        </div>
+        <div class="footer-bar">
+            <button class="btn-sec" onclick="location.reload()">↺</button>
+            <button class="btn-main" id="btnNext" onclick="processDay()">PROSES HARI 1</button>
+        </div>
+    </div>
+
+    <div id="page-compound" class="page-section">
+        <div class="center-mode">
+            <div class="big-title">VIP 2 TERCAPAI!</div>
+            <div class="desc-text">Selamat! Anda sudah VIP 2. Sinyal 3x PERMANEN.<br>Masukkan jumlah hari untuk Compounding (Gulung Saldo).</div>
+            <div class="form-box" style="width:100%"><label class="inp-label">Durasi (Hari)</label><input type="number" id="inpDaysComp" class="inp-field" value="60"></div>
+        </div>
+        <div class="footer-bar"><button class="btn-main" onclick="runCompound()">HITUNG PROYEKSI</button></div>
+    </div>
+
+    <div id="page-withdraw" class="page-section">
+        <div class="center-mode">
+            <div class="big-title">RENCANA WITHDRAW</div>
+            <div class="desc-text">Saldo hasil compounding: <b id="resCompBal" style="color:var(--gold)">0.00</b><br>Tentukan interval penarikan gaji Anda.</div>
+            <div class="form-box" style="width:100%"><label class="inp-label">Interval (Hari)</label><input type="number" id="inpDaysWd" class="inp-field" value="30"></div>
+        </div>
+        <div class="footer-bar"><button class="btn-main" onclick="runWithdraw()">LIHAT GAJI</button></div>
+    </div>
+
+    <div id="page-result" class="page-section">
+        <header><div class="brand">GOAL TERCAPAI 🏁</div></header>
+        <div class="center-mode" style="justify-content:start; padding-top:40px;">
+            <div class="card gold" style="width:100%; padding:30px; text-align:center;">
+                <div class="lbl">GAJI RUTIN ANDA</div>
+                <div style="font-size:2rem; font-weight:900; color:var(--green); margin:10px 0;" id="finalIDR">Rp 0</div>
+                <div style="font-size:1.1rem; color:#fff;" id="finalUSDT">$0</div>
+                <div style="font-size:0.8rem; color:#666; margin-top:15px; border-top:1px solid #444; padding-top:10px;">Ditarik setiap <b id="finalInterval" style="color:#fff">30</b> Hari</div>
+            </div>
+            <div class="card" style="width:100%; margin-top:20px; text-align:center;">
+                <div class="lbl">SISA SALDO INDUK (ABADI)</div>
+                <div class="val" id="finalBal">0.00</div>
+            </div>
+        </div>
+        <div class="footer-bar"><button class="btn-main" onclick="location.reload()">ULANGI SIMULASI</button></div>
+    </div>
+
+<script>
+    // --- STATE ---
+    let state = { day: 0, balance: 100, signals: 2, rank: "MEMBER", profitRate: 0.0085, kurs: 16000 };
+
+    // --- NAVIGATION ---
+    function openPage(id) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+    function openSetup() {
+        // Coba fullscreen & audio (Silent fail gapapa)
+        try { document.documentElement.requestFullscreen(); } catch(e){}
+        try { document.getElementById('bgMusic').play().catch(()=>{}); } catch(e){}
+        openPage('page-setup');
+    }
+    function startApp() {
+        state.balance = parseFloat(document.getElementById('inpStartBal').value);
+        state.profitRate = parseFloat(document.getElementById('inpProfit').value) / 100;
+        state.kurs = parseFloat(document.getElementById('inpKurs').value);
+        state.day = 0;
+        state.signals = 2;
+        state.rank = "MEMBER";
+        document.getElementById('uiKursTop').innerText = "Rp " + state.kurs.toLocaleString('id-ID');
+        updateUI();
+        openPage('page-dashboard');
+    }
+
+    // --- LOGIC UTAMA (SESUAI REQUEST ANDA) ---
+    function processDay() {
+        if(state.day >= 30) { openPage('page-compound'); return; }
+
+        state.day++;
+        let phase = "";
+        let logClass = "";
+        let bonus = 0;
+
+        // LOGIKA PRESISI SESUAI CHAT TERAKHIR:
+        // 1-5: 2 Sinyal. (End: VIP 1, Bonus)
+        // 6-10: 3 Sinyal (Bonus VIP 1 Anda).
+        // 11-15: 3 Sinyal (Bonus Si A VIP 1).
+        // 16-20: 2 Sinyal (Si B VIP 1 - Sinyal KEMBALI 2x / DROP).
+        // 21-30: 3 Sinyal (Si C VIP 1 - Sinyal 3x selama 20 hari).
+        // 30+: VIP 2 Permanen.
+
+        if(state.day <= 5) {
+            state.signals = 2; phase = "Fase Awal";
+            if(state.day === 5) { state.rank = "VIP 1"; bonus = 70; phase = "NAIK VIP 1"; logClass = "up"; }
+        } 
+        else if(state.day <= 10) {
+            state.signals = 3; phase = "Bantu Si A";
+            if(state.day === 10) { phase = "Si A Lulus"; logClass = "up"; }
+        }
+        else if(state.day <= 15) {
+            state.signals = 3; phase = "Bantu Si B";
+            if(state.day === 15) { phase = "Si B Lulus"; }
+        }
+        else if(state.day <= 20) {
+            state.signals = 2; phase = "Bantu Si C (Sinyal Drop)"; // REQUEST: Si B jadi vip1 sinyal kembali 2x
+            logClass = "down";
+            if(state.day === 20) { phase = "Si C Lulus (Reward Aktif)"; logClass = "up"; }
+        }
+        else { // Day 21-30
+            state.signals = 3; phase = (state.day<=25) ? "Bantu Si D" : "Bantu Si E"; // REQUEST: Si C jadi vip1, 20 hari sinyal ke 3
+            if(state.day === 30) {
+                state.rank = "VIP 2"; bonus = 100; phase = "VIP 2 TERCAPAI"; logClass = "up";
+            }
+        }
+
+        // Hitung Profit
+        let prev = state.balance;
+        for(let i=0; i<state.signals; i++) state.balance *= (1 + state.profitRate);
+        state.balance += bonus;
+
+        // Update Log
+        addLog(state.day, phase, `Sinyal ${state.signals}x`, state.balance, logClass);
+        updateUI();
+    }
+
+    // --- PROYEKSI ---
+    function runCompound() {
+        let days = parseInt(document.getElementById('inpDaysComp').value) || 60;
+        let totalSig = days * 3; // 3x Permanen
+        state.balance = state.balance * Math.pow((1+state.profitRate), totalSig);
+        document.getElementById('resCompBal').innerText = fmt(state.balance);
+        openPage('page-withdraw');
+    }
+
+    function runWithdraw() {
+        let days = parseInt(document.getElementById('inpDaysWd').value) || 30;
+        let totalSig = days * 3;
+        let future = state.balance * Math.pow((1+state.profitRate), totalSig);
+        let profit = future - state.balance;
+        
+        document.getElementById('finalIDR').innerText = "Rp " + (profit * state.kurs).toLocaleString('id-ID', {maximumFractionDigits:0});
+        document.getElementById('finalUSDT').innerText = fmt(profit);
+        document.getElementById('finalInterval').innerText = days;
+        document.getElementById('finalBal').innerText = fmt(state.balance);
+        openPage('page-result');
+    }
+
+    // --- HELPERS ---
+    function updateUI() {
+        document.getElementById('uiDay').innerText = state.day;
+        document.getElementById('uiBal').innerText = fmt(state.balance);
+        document.getElementById('uiBalIDR').innerText = "Rp " + (state.balance * state.kurs).toLocaleString('id-ID', {maximumFractionDigits:0});
+        document.getElementById('uiSig').innerText = state.signals + "x";
+        document.getElementById('uiRank').innerText = state.rank;
+        
+        // Button Text
+        let btn = document.getElementById('btnNext');
+        if(state.day >= 30) { btn.innerText = "LANJUT KE PROYEKSI ➔"; btn.style.background = "#fff"; }
+        else { btn.innerText = `PROSES HARI ${state.day + 1}`; btn.style.background = ""; }
+    }
+
+    function addLog(day, title, sub, bal, cls) {
+        let div = document.createElement('div');
+        div.className = `log-item ${cls}`;
+        div.innerHTML = `<div class="log-day">${day}</div><div class="log-desc"><div class="log-main">${title}</div><div class="log-sub">${sub}</div></div><div class="log-amt">$${fmt(bal,0)}</div>`;
+        let list = document.getElementById('logList');
+        if(list.firstChild) list.insertBefore(div, list.firstChild); else list.appendChild(div);
+    }
+
+    function fmt(n, d=2) { return n.toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d}); }
+</script>
+</body>
+</html>
