@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DVTEAM PRO - Roadmap</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #121212;
+            --surface-light: #1e1e1e;
+            --border: #333;
+            --gold: #d4af37;
+            --text-main: #ffffff;
+            --text-sec: #a0a0a0;
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --blue: #3498db;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            height: 60px; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(18, 18, 18, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .brand img { height: 24px; width: auto; }
+        .brand span { color: var(--gold); }
+        
+        .btn-icon {
+            background: transparent; border: none; color: var(--text-sec);
+            cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;
+        }
+        .btn-icon:hover { background: var(--surface-light); color: var(--gold); }
+        .btn-icon svg { width: 24px; height: 24px; fill: currentColor; }
+
+        /* CONTENT */
+        .content {
+            flex: 1; overflow-y: auto; padding: 80px 20px 40px 20px;
+            max-width: 600px; margin: 0 auto; width: 100%;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .card.gold-border { border-color: rgba(212, 175, 55, 0.3); }
+
+        .label { font-size: 0.75rem; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px; }
+        .value-lg { font-size: 2rem; font-weight: 800; color: #fff; line-height: 1.2; }
+        .value-sub { font-size: 1rem; color: var(--gold); font-weight: 600; margin-top: 4px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .stat-val { font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .stat-sub { font-size: 0.75rem; color: var(--text-sec); margin-top: 2px; }
+
+        /* BUTTONS */
+        .btn-primary {
+            width: 100%; background: var(--gold); color: #000;
+            border: none; padding: 16px; border-radius: 12px;
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+        
+        .btn-outline {
+            width: 100%; background: transparent; color: var(--text-sec);
+            border: 1px solid var(--border); padding: 12px; border-radius: 12px;
+            font-size: 0.9rem; margin-top: 10px; cursor: pointer;
+        }
+
+        /* LOGS */
+        .log-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin: 24px 0 12px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+        }
+        .log-title { font-size: 0.85rem; font-weight: 700; color: var(--text-sec); }
+        
+        .log-item {
+            display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center;
+            padding: 14px; background: var(--surface); border-radius: 12px; margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+        .log-item.new { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+        
+        .day-circle {
+            width: 36px; height: 36px; background: var(--surface-light); color: var(--gold);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem;
+        }
+        
+        .badge { display: inline-block; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .bg-blue { background: rgba(52, 152, 219, 0.2); color: var(--blue); }
+        .bg-gold { background: rgba(212, 175, 55, 0.2); color: var(--gold); }
+        .bg-red { background: rgba(231, 76, 60, 0.2); color: var(--red); }
+        .bg-green { background: rgba(46, 204, 113, 0.2); color: var(--green); }
+
+        /* SETTINGS MODAL */
+        #settingsModal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000;
+            display: none; align-items: center; justify-content: center; padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #1a1a1a; width: 100%; max-width: 400px;
+            border-radius: 20px; padding: 24px; border: 1px solid var(--border);
+        }
+        .modal-title { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 20px; text-align: center; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 0.8rem; color: var(--text-sec); margin-bottom: 8px; }
+        .form-input {
+            width: 100%; background: #000; border: 1px solid var(--border); color: #fff;
+            padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600;
+        }
+        .form-input:focus { border-color: var(--gold); }
+        
+        .refresh-btn { font-size: 0.75rem; color: var(--gold); text-decoration: underline; cursor: pointer; float: right; margin-top: -25px; margin-right: 5px; position: relative; z-index: 10; }
+
+        /* UTILS */
+        .hidden { display: none; }
+        .txt-green { color: var(--green); }
+        .txt-gold { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <audio id="audioPlayer" src="DVTMNP-PRO(2).mp3" preload="auto"></audio>
+
+    <header>
+        <div class="brand">
+            <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+            <div>DVTEAM <span>PRO</span></div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-icon" onclick="toggleAudio()">
+                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </button>
+            <button class="btn-icon" onclick="openSettings()">
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="card gold-border">
+            <div class="label">Total Aset Akun</div>
+            <div class="value-lg" id="dispBal">0.00</div>
+            <div class="value-sub" id="dispBalIDR">Rp 0</div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card" style="margin-bottom:0; padding:15px;">
+                <div class="label">Profit Bersih</div>
+                <div class="stat-val txt-green" id="dispProfIDR">Rp 0</div>
+                <div class="stat-sub" id="dispProfUSDT">+0.00 USDT</div>
+            </div>
+            <div class="card" style="margin-bottom:0; padding:15px;">
+                <div class="label">Tim & Rank</div>
+                <div class="stat-val"><span id="dispTeam">0</span> Orang</div>
+                <div class="stat-sub txt-gold" id="dispRank">Member</div>
+            </div>
+        </div>
+
+        <div id="phase1Ctrl">
+            <button class="btn-primary" onclick="runDay()">
+                <div style="display:flex; justify-content:space-between">
+                    <span id="btnText">JALANKAN HARI 1</span>
+                    <span style="opacity:0.7" id="dayInd">0/30</span>
+                </div>
+            </button>
+            <div style="text-align:center; margin-top:10px; font-size:0.8rem; color:#666" id="msgHint">Siap memulai trading.</div>
+        </div>
+
+        <div id="phase2Ctrl" class="hidden">
+            <div class="card" style="background:#1a1a1a; border-color:var(--gold);">
+                <div style="text-align:center; color:var(--gold); font-weight:700; margin-bottom:15px;">MODE PROYEKSI (VIP 2)</div>
+                <div class="form-group">
+                    <label class="form-label">Simulasi Hari Kedepan:</label>
+                    <input type="number" id="inpDays" class="form-input" value="30" style="text-align:center">
+                </div>
+                <button class="btn-primary" onclick="runProjection()">HITUNG HASIL</button>
+            </div>
+            <button class="btn-outline" id="btnUndo" onclick="undo()" style="display:none">Undo / Kembali</button>
+            <button class="btn-outline" onclick="location.reload()" style="border:none; color:#666">Reset Aplikasi</button>
+        </div>
+
+        <div class="log-header">
+            <span class="log-title">RIWAYAT AKTIVITAS</span>
+            <span class="log-title" id="dispSig" style="color:var(--gold)">2x Sinyal</span>
+        </div>
+        <div id="logList"></div>
+    </div>
+
+    <div id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-title">PENGATURAN</div>
+            
+            <div class="form-group">
+                <label class="form-label">Saldo Awal (USDT)</label>
+                <input type="number" id="inpStartBal" class="form-input" value="100">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Target Profit Harian (%)</label>
+                <input type="number" id="inpProfitPct" class="form-input" value="0.85" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Kurs IDR (Otomatis/Manual)</label>
+                <span class="refresh-btn" onclick="fetchKurs()">Update Kurs</span>
+                <input type="number" id="inpRateIDR" class="form-input" value="16000">
+            </div>
+
+            <button class="btn-primary" onclick="saveSettings()">SIMPAN</button>
+        </div>
+    </div>
+
+<script>
+    // --- CORE VARIABLES ---
+    let CONFIG = {
+        startBalance: 100,
+        profitRate: 0.85,
+        kurs: 16000,
+        maxPhase1: 30
+    };
+    
+    let state = {
+        day: 0,
+        balance: 100,
+        signals: 2,
+        team: 0,
+        rank: "Member",
+        phase: 1,
+        history: []
+    };
+
+    // --- EVENTS MAP ---
+    const EVENTS = {
+        5: { txt: "Naik VIP 1", tag: "VIP1", class: "bg-gold", sig: 3 },
+        10: { txt: "Ref A (VIP 1)", tag: "TIM", class: "bg-blue", sig: 3 },
+        15: { txt: "Ref B (VIP 1)", tag: "TIM", class: "bg-blue", sig: 3 },
+        16: { txt: "Benefit Habis", tag: "WARN", class: "bg-red", sig: 2, note: "Turun ke 2 Sinyal" },
+        20: { txt: "Ref C (VIP 1)", tag: "TIM", class: "bg-blue", sig: 3 },
+        25: { txt: "Ref D (VIP 1)", tag: "TIM", class: "bg-blue", sig: 3 },
+        30: { txt: "Naik VIP 2", tag: "VIP2", class: "bg-gold", sig: 3, note: "VIP 2 Permanen" }
+    };
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+        // Coba fetch kurs saat buka
+        fetchKurs();
+        updateUI();
+    };
+
+    // --- SETTINGS & KURS ---
+    function openSettings() {
+        document.getElementById('inpStartBal').value = CONFIG.startBalance;
+        document.getElementById('inpProfitPct').value = CONFIG.profitRate;
+        document.getElementById('inpRateIDR').value = CONFIG.kurs;
+        document.getElementById('settingsModal').style.display = 'flex';
+    }
+
+    function saveSettings() {
+        CONFIG.startBalance = parseFloat(document.getElementById('inpStartBal').value) || 100;
+        CONFIG.profitRate = parseFloat(document.getElementById('inpProfitPct').value) || 0.85;
+        CONFIG.kurs = parseFloat(document.getElementById('inpRateIDR').value) || 16000;
+        
+        // Reset saldo jika masih di hari 0
+        if(state.day === 0) {
+            state.balance = CONFIG.startBalance;
+        }
+        
+        updateUI();
+        document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    async function fetchKurs() {
+        try {
+            const btn = document.querySelector('.refresh-btn');
+            btn.innerText = "Loading...";
+            const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+            const data = await res.json();
+            if(data && data.rates && data.rates.IDR) {
+                document.getElementById('inpRateIDR').value = Math.floor(data.rates.IDR);
+                CONFIG.kurs = Math.floor(data.rates.IDR);
+                updateUI();
+                btn.innerText = "Sukses Update";
+                setTimeout(() => btn.innerText = "Update Kurs", 2000);
+            }
+        } catch(e) {
+            document.querySelector('.refresh-btn').innerText = "Gagal (Manual Aja)";
+        }
+    }
+
+    // --- FORMATTER ---
+    function fmt(val, type="USDT") {
+        if(type === "IDR") {
+            let res = val * CONFIG.kurs;
+            if(res >= 1000000000) return "Rp " + (res/1000000000).toFixed(2) + " M";
+            return "Rp " + res.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        return parseFloat(val).toFixed(2);
+    }
+
+    // --- MAIN LOGIC ---
+    function updateUI() {
+        document.getElementById('dispBal').innerText = fmt(state.balance);
+        document.getElementById('dispBalIDR').innerText = fmt(state.balance, "IDR");
+        
+        let prof = state.balance - CONFIG.startBalance;
+        document.getElementById('dispProfIDR').innerText = fmt(prof, "IDR");
+        document.getElementById('dispProfUSDT').innerText = (prof>=0?"+":"") + fmt(prof) + " USDT";
+        
+        document.getElementById('dispTeam').innerText = state.team;
+        document.getElementById('dispRank').innerText = state.rank;
+        document.getElementById('dispSig').innerText = state.signals + "x Sinyal";
+
+        // Phase Logic
+        if(state.phase === 1) {
+            document.getElementById('btnText').innerText = `JALANKAN HARI ${state.day + 1}`;
+            document.getElementById('dayInd').innerText = `${state.day}/${CONFIG.maxPhase1}`;
+            
+            let next = EVENTS[state.day + 1];
+            let hint = `Target: ${state.signals} sinyal x ${CONFIG.profitRate}%`;
+            if(next) {
+                if(next.tag === "WARN") hint = "PERINGATAN: Benefit besok habis!";
+                else hint = `Besok: ${next.txt}`;
+            }
+            document.getElementById('msgHint').innerText = hint;
+
+            if(state.day >= CONFIG.maxPhase1) {
+                state.phase = 2;
+                document.getElementById('phase1Ctrl').classList.add('hidden');
+                document.getElementById('phase2Ctrl').classList.remove('hidden');
+            }
+        }
+    }
+
+    function runDay() {
+        if(state.day >= CONFIG.maxPhase1) return;
+        
+        // Save history
+        state.history.push(JSON.parse(JSON.stringify(state)));
+
+        state.day++;
+        state.team = state.day;
+        
+        // Rank check
+        if(state.team >= 5) state.rank = "VIP 1";
+        if(state.team >= 30) state.rank = "VIP 2";
+
+        // Event check
+        let evt = EVENTS[state.day];
+        let desc = "Trading Harian";
+        let badge = `<span class="badge bg-green">HARIAN</span>`;
+        let note = "";
+        
+        if(evt) {
+            desc = evt.txt;
+            if(evt.sig) state.signals = evt.sig;
+            badge = `<span class="badge ${evt.class}">${evt.tag}</span>`;
+            note = evt.note || "";
+        }
+
+        // Calculation
+        let prevBal = state.balance;
+        let rate = CONFIG.profitRate / 100;
+        
+        // Compound per signal
+        for(let i=0; i<state.signals; i++) {
+            state.balance = state.balance * (1 + rate);
+        }
+        
+        let profit = state.balance - prevBal;
+        
+        addLog(state.day, badge, desc, state.balance, profit);
+        updateUI();
+    }
+
+    function runProjection() {
+        let days = parseInt(document.getElementById('inpDays').value) || 30;
+        
+        state.history.push(JSON.parse(JSON.stringify(state)));
+        
+        let prevBal = state.balance;
+        let rate = CONFIG.profitRate / 100;
+        let totalSig = days * 3; // VIP 2 assumed 3 signals
+        
+        state.balance = state.balance * Math.pow((1+rate), totalSig);
+        state.day += days;
+        
+        let profit = state.balance - prevBal;
+        
+        addLog(state.day, `<span class="badge bg-gold">PROYEKSI</span>`, `+${days} Hari Depan`, state.balance, profit, true);
+        
+        document.getElementById('btnUndo').style.display = 'block';
+        updateUI();
+    }
+
+    function undo() {
+        if(state.history.length === 0) return;
+        state = state.history.pop();
+        
+        // UI Reset if phase changed back
+        if(state.day < CONFIG.maxPhase1) {
+            state.phase = 1;
+            document.getElementById('phase1Ctrl').classList.remove('hidden');
+            document.getElementById('phase2Ctrl').classList.add('hidden');
+        }
+        
+        // Remove log
+        let list = document.getElementById('logList');
+        if(list.firstChild) list.removeChild(list.firstChild);
+        
+        if(state.history.length === 0) document.getElementById('btnUndo').style.display = 'none';
+        
+        updateUI();
+    }
+
+    function addLog(day, badge, title, bal, prof, highlight=false) {
+        let div = document.createElement('div');
+        div.className = `log-item ${highlight ? 'new' : ''}`;
+        div.innerHTML = `
+            <div class="day-circle">${day}</div>
+            <div>
+                ${badge}
+                <div style="font-weight:600; font-size:0.9rem; margin-top:2px;">${title}</div>
+            </div>
+            <div style="text-align:right">
+                <div style="color:#fff; font-weight:700;">${fmt(bal)}</div>
+                <div style="font-size:0.75rem; color:#2ecc71;">+${fmt(prof)}</div>
+            </div>
+        `;
+        let list = document.getElementById('logList');
+        list.insertBefore(div, list.firstChild);
+    }
+    
+    // Audio Control
+    const audio = document.getElementById('audioPlayer');
+    function 
