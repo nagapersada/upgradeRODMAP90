@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ROADMAP JUTAWAN</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.4);
+            --bg-dark: #000000;
+            --glass: #111;
+            --border: #333;
+            --text-main: #ffffff;
+            --green: #4ade80;
+            --red: #ff5252;
+        }
+
+        html { background-color: #000; height: 100%; width: 100%; overflow: hidden; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #000;
+            color: var(--text-main);
+            margin: 0; padding: 0; 
+            width: 100%; height: 100dvh;
+            display: flex; flex-direction: column; overflow: hidden;
+            position: fixed; top: 0; left: 0;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; }
+
+        /* HEADER */
+        header {
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
+            height: 60px; z-index: 50; flex-shrink: 0;
+        }
+        .brand { font-weight: 800; font-size: 1rem; color: var(--gold); letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .header-logo { width: 28px; height: 28px; object-fit: contain; }
+
+        /* AREA SCROLL */
+        .container {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 15px;
+            padding-bottom: 120px; 
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* PROGRESS BAR */
+        .timeline-box { padding: 15px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; }
+        .progress-track { height: 6px; background: #333; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #ffaa00); width: 0%; transition: width 0.5s ease; }
+        .day-display { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+
+        /* STATS CARDS */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-card { 
+            padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center; 
+        }
+        .stat-card.active { border-color: var(--gold); background: rgba(255, 215, 0, 0.05); }
+        
+        .label { font-size: 0.65rem; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .value { font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .sub-value { font-size: 0.7rem; color: var(--gold); margin-top: 2px; }
+
+        /* WITHDRAWAL CARD (HIDDEN INITIALLY) */
+        #withdrawCard {
+            display: none;
+            background: linear-gradient(135deg, #111, #222);
+            border: 1px solid var(--green);
+            padding: 20px; border-radius: 16px;
+            animation: popIn 0.5s;
+            text-align: center;
+        }
+
+        /* LOG LIST (URUTAN KE ATAS) */
+        .log-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        
+        .log-item {
+            display: flex; align-items: center; padding: 12px; border-radius: 12px;
+            background: #111; border-left: 3px solid #444; border-bottom: 1px solid #222;
+            animation: slideDown 0.4s;
+        }
+        .log-item.vip { border-left-color: var(--gold); background: rgba(212,175,55,0.1); border: 1px solid var(--gold); }
+        .log-item.down { border-left-color: var(--red); background: rgba(255,82,82,0.1); }
+        .log-item.final { border-left-color: var(--green); background: rgba(74, 222, 128, 0.1); border: 1px solid var(--green); }
+        
+        .log-day { 
+            font-weight: 800; color: #666; width: 45px; font-size: 0.9rem; text-align:center; margin-right: 10px;
+            background: #222; padding: 5px; border-radius: 8px;
+        }
+        .log-content { flex: 1; }
+        .log-title { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .log-sub { font-size: 0.75rem; color: #aaa; line-height: 1.3; }
+        .log-money { font-weight: 700; color: var(--gold); font-size: 0.85rem; text-align: right; min-width: 80px; }
+
+        /* CONTROLS */
+        .control-area {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 15px 20px 30px 20px;
+            background: linear-gradient(0deg, #000 50%, rgba(0,0,0,0));
+            z-index: 90; display: flex; flex-direction: column; gap: 10px;
+        }
+        .btn-main {
+            width: 100%; padding: 16px; border: none; border-radius: 50px;
+            background: linear-gradient(135deg, #d4af37, #AA8500);
+            color: #000; font-weight: 800; font-size: 1rem; text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-sec { background: #222; color: #aaa; border: 1px solid #333; padding: 12px; border-radius: 12px; font-size: 0.8rem; flex: 1; cursor: pointer; }
+
+        /* MODAL & SPLASH */
+        #splash { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100dvh; }
+        .modal-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; backdrop-filter: blur(5px);
+        }
+        .modal-box {
+            background: #111; border: 1px solid var(--gold);
+            width: 100%; max-width: 350px; padding: 25px;
+            border-radius: 20px; text-align: center;
+            box-shadow: 0 0 40px rgba(212,175,55,0.2);
+            animation: popIn 0.4s;
+        }
+
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes popIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="DVTMNP-PRO(2).mp3" loop playsinline></audio>
+
+    <div id="splash">
+        <img src="logo.png" style="width:100px; margin-bottom:20px; filter: drop-shadow(0 0 30px var(--gold));" onerror="this.style.display='none'">
+        <h1 style="color:var(--gold); margin:0; letter-spacing:4px; font-size:1.5rem;">ROADMAP 90H</h1>
+        <p style="color:#888; letter-spacing:2px; font-size:0.7rem; margin-top:10px;">SIMULASI JUTAWAN</p>
+        <button class="btn-main" style="width:auto; padding:12px 40px; margin-top:30px;" onclick="forceStart()">MULAI</button>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <span style="font-size:3rem; display:block; margin-bottom:10px;" id="mIcon">🚀</span>
+            <div style="font-size:1.2rem; font-weight:800; color:var(--gold); margin-bottom:10px; text-transform:uppercase;" id="mTitle">JUDUL</div>
+            <div style="color:#ccc; font-size:0.9rem; line-height:1.5; margin-bottom:20px;" id="mDesc">Deskripsi...</div>
+            <button class="btn-main" onclick="handleModalAction()">LANJUTKAN</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <img src="logo.png" class="header-logo" onerror="this.style.display='none'">
+            DVTEAM <span>ROADMAP</span>
+        </div>
+        <div style="text-align:right">
+            <div class="label" style="margin:0">KURS IDR</div>
+            <div style="color:var(--gold); font-weight:bold; font-size:0.9rem">Rp 16.000</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="timeline-box">
+            <div class="day-display">
+                <span>HARI KE-<strong id="uiDay" style="color:#fff">0</strong></span>
+                <span>TARGET: <strong>90 HARI</strong></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="uiProgress"></div>
+            </div>
+        </div>
+
+        <div id="withdrawCard">
+            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Potensi Penghasilan Bulanan</div>
+            <div style="font-size:1.8rem; font-weight:800; color:var(--green);" id="uiMonthlyIDR">Rp 0</div>
+            <div style="font-size:0.9rem; color:#fff;" id="uiMonthlyUSDT">$0.00 / Bulan</div>
+            <div style="font-size:0.7rem; color:#666; margin-top:10px;">*Ditarik setiap 30 hari tanpa mengurangi saldo modal.</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card active">
+                <div class="label">SALDO TOTAL</div>
+                <div class="value" id="uiBalUSDT">100.00</div>
+                <div class="sub-value" id="uiBalIDR">Rp 1.600.000</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">PROFIT BERSIH</div>
+                <div class="value" style="color:var(--green)" id="uiProfIDR">Rp 0</div>
+                <div class="sub-value" id="uiProfUSDT">+0.00 USDT</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card" style="padding:10px">
+                <div class="label">STATUS TIM</div>
+                <div style="display:flex; justify-content:space-between; align-items:end">
+                    <div class="value" style="font-size:1rem" id="uiTeam">0 Org</div>
+                    <div style="font-size:0.6rem; background:#333; padding:2px 6px; border-radius:4px; color:var(--gold);" id="uiRank">MEMBER</div>
+                </div>
+            </div>
+            <div class="stat-card" style="padding:10px">
+                <div class="label">KEKUATAN</div>
+                <div style="display:flex; justify-content:space-between; align-items:end">
+                    <div class="value" style="font-size:1rem" id="uiSig">2x</div>
+                    <div style="font-size:0.6rem; color:#888">Sinyal/Hari</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:5px">
+            <div class="label" style="margin-left:5px; margin-bottom:10px; color:#fff; border-bottom:1px solid #333; padding-bottom:5px;">JURNAL PERJALANAN (HARI TERBARU DI ATAS)</div>
+            <div class="log-container" id="logList"></div>
+        </div>
+    </div>
+
+    <div class="control-area">
+        <button class="btn-main" id="btnAction" onclick="toggleAutoRun()">
+            <span>▶</span> JALANKAN SIMULASI
+        </button>
+        <div style="display:flex; gap:10px">
+            <button class="btn-sec" onclick="resetApp()">↺ RESET</button>
+            <button class="btn-sec" onclick="toggleMusic()">♫ MUSIK</button>
+        </div>
+    </div>
+
+<script>
+    // --- KONFIGURASI ---
+    const CONFIG = {
+        startBalance: 100,
+        profitRate: 0.0085, // 0.85%
+        kurs: 16000,
+        speed: 800 // Kecepatan simulasi (0.8 detik per hari)
+    };
+
+    let state = { day: 0, balance: CONFIG.startBalance, team: 0, signals: 2, rank: "MEMBER", isRunning: false, timer: null, compoundMode: false };
+
+    // --- SKENARIO ACARA (Sesuai Request) ---
+    const EVENTS = {
+        5: { 
+            title: "VIP 1 + BONUS", 
+            body: "Tim A,B,C,D,E Bergabung. Bonus $20 (Tim) + $50 (VIP) Cair. \nReward: Sinyal naik 3x.", 
+            icon: "⭐", bonus: 70, stop: true, type: "vip" 
+        },
+        10: { 
+            title: "SI 'A' JADI VIP 1", 
+            body: "Aman! Si A sukses VIP 1. \nSinyal 3x masih aktif.", 
+            icon: "✅", stop: false, type: "vip"
+        },
+        15: {
+            title: "FASE SI 'C' (DROP)",
+            body: "Besok mulai bantu Si C. \nKarena belum qualified, Sinyal besok TURUN ke 2x sehari. \nKejar target C!",
+            icon: "⚠️", stop: true, type: "down"
+        },
+        20: {
+            title: "SI 'C' LULUS VIP 1",
+            body: "Kerja Bagus! Si C sukses VIP 1. \nReward: Sinyal NAIK LAGI ke 3x (Bonus 20 Hari).",
+            icon: "🚀", stop: true, type: "vip"
+        },
+        30: { 
+            title: "VIP 2 & COMPOUND", 
+            body: "Si E Lulus. Anda resmi VIP 2! \nBonus $100 Cair. Sinyal 3x PERMANEN. \n\nKlik LANJUTKAN untuk langsung menghitung hasil compound 60 hari ke depan.", 
+            icon: "👑", bonus: 100, stop: true, type: "vip", action: "compound" 
+        }
+    };
+
+    function forceStart() {
+        try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); } catch(e){}
+        const splash = document.getElementById('splash');
+        splash.style.opacity = '0';
+        setTimeout(() => splash.style.display = 'none', 500);
+        try { document.getElementById('bgMusic').play().catch(()=>{}); } catch(e){}
+        renderUI();
+    }
+
+    function toggleMusic() {
+        const m = document.getElementById('bgMusic');
+        if(m.paused) m.play(); else m.pause();
+    }
+
+    function fmt(n, idr=false) {
+        if(idr) return "Rp " + (n * CONFIG.kurs).toLocaleString('id-ID', {maximumFractionDigits:0});
+        return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    function renderUI() {
+        document.getElementById('uiDay').innerText = state.day;
+        document.getElementById('uiProgress').style.width = (state.day / 90 * 100) + "%";
+        
+        document.getElementById('uiBalUSDT').innerText = fmt(state.balance);
+        document.getElementById('uiBalIDR').innerText = fmt(state.balance, true);
+        
+        let profit = state.balance - CONFIG.startBalance;
+        document.getElementById('uiProfUSDT').innerText = (profit>=0?"+":"") + fmt(profit) + " USDT";
+        document.getElementById('uiProfIDR').innerText = fmt(profit, true);
+        
+        document.getElementById('uiTeam').innerText = state.team;
+        document.getElementById('uiRank').innerText = state.rank;
+        
+        let sigEl = document.getElementById('uiSig');
+        sigEl.innerText = state.signals + "x";
+        sigEl.style.color = state.signals === 3 ? "var(--green)" : "#fff";
+
+        const btn = document.getElementById('btnAction');
+        if(state.day >= 90) {
+            btn.innerHTML = "SELESAI 🏁"; btn.style.background = "#333";
+        } else if(state.isRunning) {
+            btn.innerHTML = "STOP ⏸"; btn.style.background = "var(--red)";
+        } else {
+            btn.innerHTML = "LANJUTKAN ▶"; btn.style.background = ""; 
+        }
+    }
+
+    function processDay() {
+        if(state.day >= 30 && !state.compoundMode) { 
+            // Safety stop at day 30 if not triggered via modal
+            stopAuto(); 
+            let evt = EVENTS[30];
+            showModal(evt);
+            return; 
+        }
+        if(state.day >= 90) { stopAuto(); return; }
+
+        state.day++;
+        if(state.day <= 30) state.team = state.day; 
+
+        // --- LOGIKA ALUR (Revised) ---
+        
+        // RANK
+        if(state.day >= 5) state.rank = "VIP 1";
+        if(state.day >= 30) state.rank = "VIP 2";
+
+        // SINYAL LOGIC
+        if(state.day <= 5) {
+            state.signals = 2; 
+        } else if(state.day >= 6 && state.day <= 15) {
+            state.signals = 3; // Fase A & B (Aman)
+        } else if(state.day >= 16 && state.day <= 20) {
+            state.signals = 2; // Fase C (DROP 5 HARI)
+        } else {
+            state.signals = 3; // Fase C Selesai -> 3x Permanen
+        }
+
+        // HITUNG PROFIT HARIAN
+        let startBal = state.balance;
+        for(let i=0; i<state.signals; i++) state.balance *= (1 + CONFIG.profitRate);
+
+        // CEK EVENT
+        let evt = EVENTS[state.day];
+        let note = `Trading ${state.signals}x Sinyal`;
+        let logClass = "";
+        
+        if(evt) {
+            if(evt.bonus) { state.balance += evt.bonus; note = `BONUS $${evt.bonus} + Profit`; }
+            logClass = evt.type || "";
+            if(evt.stop) { stopAuto(); showModal(evt); }
+        }
+
+        // FASE NAME
+        let phase = "Compound";
+        if(state.day <= 5) phase = "Bangun Tim";
+        else if(state.day <= 10) phase = "Bantu Si A";
+        else if(state.day <= 15) phase = "Bantu Si B";
+        else if(state.day <= 20) phase = "Bantu Si C";
+        else if(state.day <= 25) phase = "Bantu Si D";
+        else if(state.day <= 30) phase = "Bantu Si E";
+
+        addLogItem(state.day, evt ? evt.title : `HARI ${state.day} (${phase})`, note, state.balance, logClass);
+        renderUI();
+    }
+
+    // --- TIME JUMP 60 HARI ---
+    function runCompoundPhase() {
+        state.compoundMode = true;
+        
+        // Hitung Kompon 60 Hari (Langsung)
+        // Rumus: Balance * (1 + rate)^(totalSinyal)
+        // 60 hari * 3 sinyal = 180 sinyal
+        let compoundingDays = 60;
+        let totalSignals = compoundingDays * 3;
+        
+        let startBal = state.balance;
+        
+        // Kalkulasi matematika langsung
+        state.balance = state.balance * Math.pow((1 + CONFIG.profitRate), totalSignals);
+        state.day = 90; // Lompat ke hari 90
+
+        // Tambah Log Spesial
+        addLogItem("31-90", "COMPOUNDING 60 HARI", "Gulung saldo otomatis tanpa penarikan...", state.balance, "final");
+
+        // Hitung Gaji Bulanan (Untuk kartu akhir)
+        // Asumsi: 30 hari kedepan dengan 3 sinyal/hari
+        let next30DaysSignals = 30 * 3;
+        let potentialBalance = state.balance * Math.pow((1 + CONFIG.profitRate), next30DaysSignals);
+        let monthlyProfit = potentialBalance - state.balance; // Profit bersih 30 hari kedepan
+
+        // Tampilkan Kartu Withdraw
+        document.getElementById('withdrawCard').style.display = 'block';
+        document.getElementById('uiMonthlyUSDT').innerText = fmt(monthlyProfit) + " USDT / Bulan";
+        document.getElementById('uiMonthlyIDR').innerText = fmt(monthlyProfit, true);
+
+        renderUI();
+        
+        // Scroll ke atas agar kartu terlihat
+        document.querySelector('.container').scrollTop = 0;
+    }
+
+    function addLogItem(day, title, sub, bal, cls) {
+        const list = document.getElementById('logList');
+        const div = document.createElement('div');
+        div.className = `log-item ${cls}`;
+        div.innerHTML = `
+            <div class="log-day">${day}</div>
+            <div class="log-content">
+                <div class="log-title">${title}</div>
+                <div class="log-sub">${sub}</div>
+            </div>
+            <div class="log-money"><div>$${fmt(bal)}</div></div>
+        `;
+        if(list.firstChild) list.insertBefore(div, list.firstChild);
+        else list.appendChild(div);
+    }
+
+    function toggleAutoRun() {
+        if(state.day >= 90) return;
+        if(state.isRunning) stopAuto(); 
+        else {
+            state.isRunning = true;
+            renderUI();
+            processDay();
+            state.timer = setInterval(processDay, CONFIG.speed);
+        }
+    }
+
+    function stopAuto() {
+        state.isRunning = false;
+        clearInterval(state.timer);
+        renderUI();
+    }
+
+    function resetApp() {
+        stopAuto();
+        state =
