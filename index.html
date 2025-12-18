@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DVTEAM ROADMAP</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.3);
+            --bg-dark: #000000;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --green: #4ade80;
+            --red: #ff5252;
+        }
+
+        /* RESET & FULLSCREEN FIX */
+        html { background-color: #000000; height: 100%; width: 100%; overflow: hidden; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #000000; /* Menutup bar putih */
+            color: var(--text-main);
+            margin: 0; padding: 0; 
+            width: 100%;
+            height: 100dvh; /* Dynamic Viewport Height untuk Mobile */
+            display: flex; flex-direction: column; overflow: hidden;
+            position: fixed; top: 0; left: 0; /* Kunci posisi */
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; }
+
+        /* --- UI COMPONENTS --- */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        /* HEADER */
+        header {
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); 
+            border-bottom: 1px solid var(--border);
+            height: 60px; z-index: 50;
+        }
+        .brand { font-weight: 800; font-size: 1rem; color: var(--gold); letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .brand span { color: #fff; font-weight: 300; font-size: 0.8em; opacity: 0.7; }
+        .header-logo { width: 28px; height: 28px; object-fit: contain; }
+
+        /* MAIN SCROLL AREA */
+        .container {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 15px;
+            padding-bottom: 100px; /* Space for bottom nav */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* PROGRESS BAR */
+        .timeline-box { padding: 15px; }
+        .progress-track { height: 6px; background: #333; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #ffaa00); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--gold-glow); }
+        .day-display { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
+        .day-display strong { color: #fff; }
+
+        /* CARDS */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-card { padding: 15px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+        .stat-card.active { border-color: rgba(255, 215, 0, 0.4); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        
+        .label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .value { font-size: 1.2rem; font-weight: 700; color: #fff; }
+        .sub-value { font-size: 0.7rem; color: var(--gold); margin-top: 2px; }
+        .highlight { color: var(--green); }
+
+        /* LOG LIST */
+        .log-list { display: flex; flex-direction: column; gap: 8px; }
+        .log-item {
+            display: flex; align-items: center; padding: 10px; border-radius: 10px;
+            background: rgba(30,30,30,0.6); border-left: 3px solid #444;
+            animation: slideIn 0.3s ease-out;
+        }
+        .log-item.milestone { border-left-color: var(--gold); background: rgba(212,175,55,0.15); }
+        .log-item.warning { border-left-color: var(--red); background: rgba(255,82,82,0.15); }
+        
+        .log-day { font-weight: 800; color: #666; width: 35px; font-size: 0.8rem; }
+        .log-content { flex: 1; }
+        .log-title { font-size: 0.85rem; font-weight: 600; color: #fff; }
+        .log-sub { font-size: 0.7rem; color: #999; }
+        .log-money { font-weight: 700; color: var(--gold); font-size: 0.8rem; text-align: right; }
+
+        /* CONTROL BAR */
+        .control-area {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 15px 20px 25px 20px; /* Extra padding bottom for iPhone home bar */
+            background: linear-gradient(0deg, #000 30%, rgba(0,0,0,0));
+            z-index: 90; display: flex; flex-direction: column; gap: 10px;
+        }
+        .btn-main {
+            width: 100%; padding: 16px; border: none; border-radius: 50px;
+            background: linear-gradient(135deg, #d4af37, #AA8500);
+            color: #000; font-weight: 800; font-size: 0.95rem; text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-sec { background: rgba(255,255,255,0.1); color: #aaa; border: none; padding: 10px; border-radius: 10px; font-size: 0.75rem; flex: 1; cursor: pointer; }
+
+        /* MODAL POPUP */
+        .modal-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; backdrop-filter: blur(8px);
+        }
+        .modal-box {
+            background: #111; border: 1px solid var(--gold);
+            width: 100%; max-width: 350px; padding: 25px;
+            border-radius: 20px; text-align: center;
+            box-shadow: 0 0 40px rgba(212,175,55,0.15);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+        .modal-title { font-size: 1.3rem; font-weight: 800; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
+        .modal-desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px; }
+
+        /* SPLASH SCREEN - FIXED */
+        #splash { 
+            position: fixed; inset: 0; 
+            background: #000; z-index: 10000; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            transition: opacity 0.5s;
+            /* Pastikan splash menutupi segalanya */
+            width: 100%; height: 100dvh; 
+        }
+
+        @keyframes slideIn { from { opacity:0; transform:translateX(-10px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes popIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="DVTMNP-PRO(2).mp3" loop playsinline></audio>
+
+    <div id="splash">
+        <img src="logo.png" style="width:100px; margin-bottom:20px; filter: drop-shadow(0 0 25px var(--gold));" onerror="this.style.display='none'">
+        <h1 style="color:var(--gold); margin:0; letter-spacing:4px; font-size:1.8rem; text-align:center;">ROADMAP<br>90H</h1>
+        <p style="color:#666; letter-spacing:2px; font-size:0.7rem; margin-top:10px;">SIMULASI KEBEBASAN FINANSIAL</p>
+        
+        <button class="btn-main" style="width:auto; padding:15px 50px; margin-top:40px; min-width: 200px;" onclick="forceStart()">
+            MULAI SEKARANG
+        </button>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <span class="modal-icon" id="mIcon">🚀</span>
+            <div class="modal-title" id="mTitle">JUDUL EVENT</div>
+            <div class="modal-desc" id="mDesc">Deskripsi event disini...</div>
+            <button class="btn-main" onclick="closeModal()">LANJUTKAN</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <img src="logo.png" class="header-logo" onerror="this.style.display='none'">
+            DVTEAM <span>PRO</span>
+        </div>
+        <div style="text-align:right">
+            <div class="label" style="margin:0">KURS IDR</div>
+            <div style="color:var(--gold); font-weight:bold; font-size:0.9rem" id="uiKurs">Rp 16.000</div>
+        </div>
+    </header>
+
+    <div class="container" id="scrollArea">
+        
+        <div class="glass-panel timeline-box">
+            <div class="day-display">
+                <span>HARI KE-<strong id="uiDay">0</strong></span>
+                <span>TARGET: <strong>90 HARI</strong></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="uiProgress"></div>
+            </div>
+            <div style="font-size:0.7rem; color:#aaa; margin-top:8px; text-align:center; font-style: italic;" id="uiStatusText">
+                Tekan tombol putar di bawah...
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="glass-panel stat-card active">
+                <div class="label">SALDO TOTAL</div>
+                <div class="value" id="uiBalUSDT">100.00</div>
+                <div class="sub-value" id="uiBalIDR">Rp 1.600.000</div>
+            </div>
+            <div class="glass-panel stat-card">
+                <div class="label">PROFIT BERSIH</div>
+                <div class="value highlight" id="uiProfIDR">Rp 0</div>
+                <div class="sub-value" id="uiProfUSDT">+0.00 USDT</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="glass-panel stat-card" style="padding:12px; min-height:80px">
+                <div class="label">TIM SAYA</div>
+                <div style="display:flex; justify-content:space-between; align-items:end">
+                    <div class="value" style="font-size:1.1rem" id="uiTeam">0 Org</div>
+                    <div style="font-size:0.6rem; background:#333; padding:3px 8px; border-radius:4px; color:var(--gold); border:1px solid #444;" id="uiRank">MEMBER</div>
+                </div>
+            </div>
+            <div class="glass-panel stat-card" style="padding:12px; min-height:80px">
+                <div class="label">POWER</div>
+                <div style="display:flex; justify-content:space-between; align-items:end">
+                    <div class="value" style="font-size:1.1rem" id="uiSig">2x</div>
+                    <div style="font-size:0.65rem; color:#888">Sinyal/Hari</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:5px">
+            <div class="label" style="margin-left:5px; margin-bottom:10px;">RIWAYAT AKTIVITAS</div>
+            <div class="log-list" id="logList"></div>
+        </div>
+
+    </div>
+
+    <div class="control-area">
+        <button class="btn-main" id="btnAction" onclick="toggleAutoRun()">
+            <span>▶</span> PUTAR SIMULASI (AUTO)
+        </button>
+        <div style="display:flex; gap:10px">
+            <button class="btn-sec" onclick="resetApp()">↺ ULANG</button>
+            <button class="btn-sec" onclick="toggleMusic()">♫ MUSIK</button>
+        </div>
+    </div>
+
+<script>
+    // --- KONFIGURASI ---
+    const CONFIG = {
+        startBalance: 100,
+        profitRate: 0.0085, 
+        kurs: 16000,
+        speed: 800 
+    };
+
+    // --- CERITA SIMULASI ---
+    const STORY = {
+        1: { title: "Langkah Awal", body: "Anda memulai dengan modal $100. \nTugas: Konsisten trading & pelajari sistem.", icon: "🌱", stop: true },
+        5: { title: "Bonus Sponsor", body: "Selamat! Anda merekrut 5 orang. \nBonus $70 cair! Akun naik ke VIP 1.", icon: "⭐", bonus: 70, stop: true },
+        16: { title: "Masa Percobaan Habis", body: "Waspada! Benefit pengguna baru habis.\nSinyal turun jadi 2x. Segera kejar Rank!", icon: "⚠️", stop: true, type: "warning" },
+        20: { title: "Momentum Kembali", body: "Tim berkembang pesat.\nSinyal kembali stabil menjadi 3x sehari.", icon: "🔥", stop: false },
+        30: { title: "Leader VIP 2", body: "Luar Biasa! Tim mencapai 30 orang. \nBonus $100 cair. Income makin deras.", icon: "👑", bonus: 100, stop: true },
+        60: { title: "Compounding Effect", body: "Saldo bergulung otomatis. \nUang bekerja keras untuk Anda sekarang.", icon: "❄️", stop: true },
+        90: { title: "Goal Tercapai", body: "90 Hari Tuntas! \nInilah hasil dari konsistensi & duplikasi.", icon: "🏁", stop: true }
+    };
+
+    let state = { day: 0, balance: CONFIG.startBalance, team: 0, signals: 2, rank: "MEMBER", isRunning: false, timer: null };
+
+    // --- FUNGSI UTAMA YANG DIPERBAIKI ---
+    function forceStart() {
+        // 1. Coba Full Screen (Android)
+        try {
+            var elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen(); }
+            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+        } catch(e) { console.log("Fullscreen blocked"); }
+
+        // 2. Hilangkan Splash DULUAN (Jangan tunggu audio)
+        const splash = document.getElementById('splash');
+        splash.style.opacity = '0';
+        setTimeout(() => { 
+            splash.style.display = 'none'; 
+        }, 500);
+
+        // 3. Baru coba putar audio (Aman dari error)
+        try {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.5;
+            music.play().catch(err => {
+                console.log("Autoplay dicegah browser, user harus klik manual tombol musik nanti.");
+            });
+        } catch(e) {
+            console.log("Audio error ignored");
+        }
+
+        renderUI();
+    }
+
+    function toggleMusic() {
+        const music = document.getElementById('bgMusic');
+        if(music.paused) music.play(); else music.pause();
+    }
+
+    function formatMoney(usd, isIDR=false) {
+        if(isIDR) {
+            let idr = usd * CONFIG.kurs;
+            return "Rp " + idr.toLocaleString('id-ID', {maximumFractionDigits:0});
+        }
+        return usd.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    function renderUI() {
+        document.getElementById('uiDay').innerText = state.day;
+        document.getElementById('uiProgress').style.width = (state.day / 90 * 100) + "%";
+        document.getElementById('uiBalUSDT').innerText = formatMoney(state.balance);
+        document.getElementById('uiBalIDR').innerText = formatMoney(state.balance, true);
+        
+        let profit = state.balance - CONFIG.startBalance;
+        document.getElementById('uiProfUSDT').innerText = (profit>=0?"+":"") + formatMoney(profit) + " USDT";
+        document.getElementById('uiProfIDR').innerText = formatMoney(profit, true);
+        
+        document.getElementById('uiTeam').innerText = state.team + " Org";
+        document.getElementById('uiRank').innerText = state.rank;
+        document.getElementById('uiSig').innerText = state.signals + "x";
+
+        const btn = document.getElementById('btnAction');
+        if(state.day >= 90) {
+            btn.innerHTML = "<span>🏁</span> SELESAI";
+            btn.style.background = "#444";
+        } else if(state.isRunning) {
+            btn.innerHTML = "<span>⏸</span> STOP SEMENTARA";
+            btn.style.background = "#ff5252";
+        } else {
+            btn.innerHTML = "<span>▶</span> PUTAR SIMULASI (AUTO)";
+            btn.style.background = ""; 
+        }
+    }
+
+    function processDay() {
+        if(state.day >= 90) { stopAuto(); return; }
+
+        state.day++;
+        
+        // Logika Tim Linear Sederhana
+        if(state.day <= 30) state.team = state.day; 
+        else if(state.day > 30 && state.day % 2 === 0) state.team++;
+
+        // Logika Rank
+        if(state.team >= 5) state.rank = "VIP 1";
+        if(state.team >= 30) state.rank = "VIP 2";
+
+        // Logika Sinyal
+        if(state.day < 5) state.signals = 2;
+        else if(state.day >= 5 && state.day <= 15) state.signals = 3; 
+        else if(state.day > 15 && state.day < 20) state.signals = 2; 
+        else state.signals = 3; 
+
+        // Hitung Profit
+        let startBal = state.balance;
+        for(let i=0; i<state.signals; i++) state.balance = state.balance * (1 + CONFIG.profitRate);
+        
+        // Cek Story/Event
+        let evt = STORY[state.day];
+        let note = `Trading ${state.signals}x Sinyal`;
+        let isMilestone = false;
+
+        if(evt) {
+            if(evt.bonus) {
+                state.balance += evt.bonus;
+                note = `BONUS $${evt.bonus} + Trading`;
+                isMilestone = true;
+            }
+            document.getElementById('uiStatusText').innerText = evt.title;
+            if(evt.stop) {
+                stopAuto();
+                showModal(evt);
+            }
+        }
+
+        addLogItem(state.day, evt ? evt.title : "Profit Harian", note, state.balance, isMilestone, evt?.type);
+        renderUI();
+        
+        const container = document.getElementById('scrollArea');
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function addLogItem(day, title, sub, bal, isMilestone, type) {
+        const list = document.getElementById('logList');
+        const div = document.createElement('div');
+        div.className = `log-item ${isMilestone?'milestone':''} ${type === 'warning'?'warning':''}`;
+        div.innerHTML = `
+            <div class="log-day">${day}</div>
+            <div class="log-content">
+                <div class="log-title">${title}</div>
+                <div class="log-sub">${sub}</div>
+            </div>
+            <div class="log-money"><div>$${formatMoney(bal)}</div></div>
+        `;
+        list.appendChild(div);
+    }
+
+    function toggleAutoRun() {
+        if(state.day >= 90) return;
+        if(state.isRunning) { stopAuto(); } 
+        else {
+            state.isRunning = true;
+            renderUI();
+            processDay(); 
+            state.timer = setInterval(processDay, CONFIG.speed);
+        }
+    }
+
+    function stopAuto() {
+        state.isRunning = false;
+        clearInterval(state.timer);
+        renderUI();
+    }
+
+    function resetApp() {
+        stopAuto();
+        state = { day: 0, balance: CONFIG.startBalance, team: 0, signals: 2, rank: "MEMBER", isRunning: false, timer: null };
+        document.getElementById('logList').innerHTML = "";
+        document.getElementById('uiStatusText').innerText = "Siap memulai...";
+        renderUI();
+    }
+
+    function showModal(evt) {
+        document.getElementById('mIcon').innerText = evt.icon;
+        document.getElementById('mTitle').innerText = evt.title;
+        document.getElementById('mDesc').innerText = evt.body;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+        toggleAutoRun(); 
+    }
+
+    // Init display
+    renderUI();
+
+</script>
+</body>
+</html>
