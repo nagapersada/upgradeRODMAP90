@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DVTEAM PRO | Roadmap 90H</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-grad: linear-gradient(135deg, #d4af37 0%, #8a6d3b 100%);
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(212, 175, 55, 0.2);
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+            --green: #00ff88;
+            --red: #ff4444;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            outline: none; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg); 
+            color: var(--text);
+            margin: 0; padding: 0; 
+            height: 100dvh; 
+            display: flex; flex-direction: column; 
+            overflow: hidden;
+        }
+
+        /* HEADER PREMIUM */
+        header {
+            height: 70px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; flex-shrink: 0;
+        }
+
+        .brand { 
+            font-size: 1.1rem; font-weight: 800; color: var(--gold); letter-spacing: 1px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .header-logo { height: 30px; width: auto; }
+        
+        .right-controls { display: flex; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; align-items: flex-end; }
+        .input-group label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 2px; }
+        .input-group input { 
+            background: transparent; border: none; color: var(--gold); 
+            width: 65px; text-align: right; font-weight: 800; font-size: 1rem;
+            border-bottom: 1px solid transparent; transition: 0.3s;
+        }
+        .input-group input:focus { border-bottom-color: var(--gold); }
+
+        /* MAIN LAYOUT PRESISI */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content { flex-direction: row; overflow: hidden; }
+            .left-panel { width: 45%; overflow-y: auto; border-right: 1px solid var(--border); }
+            .right-panel { width: 55%; overflow-y: auto; }
+        }
+
+        .left-panel, .right-panel { padding: 25px; }
+
+        /* CARDS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex; flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover { background: rgba(255,255,255,0.05); border-color: var(--gold); }
+        .card.gold { border-left: 4px solid var(--gold); }
+        .card.green { border-left: 4px solid var(--green); }
+
+        .card .lbl { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+        .card .val { font-size: 1.4rem; font-weight: 800; line-height: 1.2; word-break: break-all; }
+        .card .sub { font-size: 0.85rem; color: var(--text-dim); margin-top: 5px; font-weight: 500; }
+
+        /* ACTION SECTION */
+        .action-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--gold);
+            border-radius: 24px;
+            padding: 25px;
+            margin-top: 10px;
+        }
+
+        .btn-main {
+            width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 20px;
+            border-radius: 16px; font-weight: 800; font-size: 1rem; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s;
+        }
+        .btn-main:active { transform: scale(0.98); }
+
+        /* LOGS SECTION */
+        .log-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .log-header h3 { font-size: 1rem; color: var(--gold); font-weight: 800; margin: 0; text-transform: uppercase; }
+
+        .btn-undo {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text-dim); padding: 8px 16px; border-radius: 10px;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-undo:hover { background: var(--red); color: white; border-color: var(--red); }
+
+        .log-item {
+            background: #0d0d0d;
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: grid; grid-template-columns: 45px 1fr auto;
+            align-items: center; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .log-day { font-weight: 800; color: var(--gold); font-size: 1.2rem; }
+        .log-content { padding: 0 15px; }
+        .log-content div:first-child { font-weight: 700; font-size: 0.95rem; }
+        .log-content div:last-child { font-size: 0.75rem; color: var(--text-dim); }
+        .log-val { text-align: right; font-weight: 800; font-size: 1rem; }
+
+        /* SPLASH SCREEN PREMIUM */
+        #splash {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+        .splash-inner { text-align: center; }
+        .splash-inner img { width: 150px; filter: drop-shadow(0 0 30px rgba(212,175,55,0.4)); margin-bottom: 30px; }
+
+        /* SCROLLBAR CUSTOM */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div id="splash">
+        <div class="splash-inner">
+            <img src="logo.png" alt="Logo">
+            <h1 style="color:var(--gold); font-weight:900; letter-spacing:5px; margin:0;">DVTEAM PRO</h1>
+            <p style="color:var(--text-dim); font-size:0.8rem; letter-spacing:2px; margin-top:10px;">ROADMAP 90 HARI</p>
+            <button onclick="openApp()" class="btn-main" style="margin-top:40px; padding:15px 40px; width:auto;">MASUK APLIKASI</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <img src="logo.png" alt="Logo" class="header-logo">
+            DVTEAM <span style="font-weight:300; color:white">PRO</span>
+        </div>
+        <div class="right-controls">
+            <div class="input-group">
+                <label>Profit %</label>
+                <input type="number" id="inpProfit" value="0.85" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>IDR Kurs</label>
+                <input type="number" id="inpKurs" value="16000" onchange="updateUI()">
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="stats-grid">
+                <div class="card gold" onclick="inputNewBalance()" style="cursor:pointer">
+                    <div class="lbl">Total Saldo Akun</div>
+                    <div class="val" id="dispBal">100.00</div>
+                    <div class="sub" id="dispBalIDR">Rp 1.600.000</div>
+                </div>
+                <div class="card green">
+                    <div class="lbl">Net Profit</div>
+                    <div class="val" id="dispProfIDR">Rp 0</div>
+                    <div class="sub" id="dispProfUSDT">+0.00 USDT</div>
+                </div>
+                <div class="card">
+                    <div class="lbl">Sinyal Harian</div>
+                    <div class="val" id="dispSig">2x</div>
+                    <div class="sub">100% Win Rate</div>
+                </div>
+                <div class="card">
+                    <div class="lbl">Total Tim</div>
+                    <div class="val" id="dispTeam">0</div>
+                    <div class="sub" id="dispRank" style="color:var(--gold)">Member</div>
+                </div>
+            </div>
+
+            <div id="controlPhase1">
+                <button class="btn-main" onclick="runDay()">
+                    Jalankan Hari <span id="dayCount">1</span>
+                </button>
+            </div>
+
+            <div id="projPanel" style="display:none;" class="action-box">
+                <div style="color:var(--gold); font-weight:800; text-align:center; margin-bottom:20px; font-size:0.9rem;">VIP MAX - MODE PROYEKSI</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:rgba(0,0,0,0.3); padding:15px; border-radius:12px;">
+                    <span style="color:var(--text-dim); font-size:0.85rem; font-weight:700;">Tambah Hari:</span>
+                    <input type="number" id="inpDays" value="30" style="background:none; border:none; color:white; font-size:1.4rem; font-weight:800; text-align:right; width:80px;">
+                </div>
+                <button class="btn-main" onclick="runProjection()">Hitung Hasil Akhir</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="log-header">
+                <h3>Riwayat Aktivitas</h3>
+                <button class="btn-undo" id="btnUndo" onclick="undo()" style="display:none;">UNDO</button>
+            </div>
+            <div id="logList"></div>
+        </div>
+    </div>
+
+<script>
+    // Inisialisasi State (Kembali ke Logika Asli)
+    const CONFIG = { startBalance: 100, maxDaysPhase1: 30 };
+    let state = { day: 0, balance: 100, signals: 2, team: 0, rank: "Member", phase: 1, displayProfitUSDT: 0 };
+    let historyStack = [];
+
+    function openApp() {
+        document.getElementById('splash').style.opacity = '0';
+        setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
+    }
+
+    function inputNewBalance() {
+        if(state.day > 0) return alert("Reset aplikasi untuk ubah modal.");
+        let val = prompt("Masukkan Saldo Modal (USDT):", state.balance);
+        if(val && !isNaN(val)) {
+            state.balance = parseFloat(val);
+            CONFIG.startBalance = state.balance;
+            updateUI();
+        }
+    }
+
+    function updateUI() {
+        const kurs = parseFloat(document.getElementById('inpKurs').value) || 16000;
+        document.getElementById('dispBal').innerText = state.balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dispBalIDR').innerText = "Rp " + (state.balance * kurs).toLocaleString('id-ID');
+        
+        let profit = state.phase === 1 ? (state.balance - CONFIG.startBalance) : state.displayProfitUSDT;
+        document.getElementById('dispProfIDR').innerText = "Rp " + (profit * kurs).toLocaleString('id-ID');
+        document.getElementById('dispProfUSDT').innerText = (profit>=0?"+":"") + profit.toLocaleString(undefined, {minimumFractionDigits:2}) + " USDT";
+        
+        document.getElementById('dispSig').innerText = state.signals + "x";
+        document.getElementById('dispTeam').innerText = state.team.toLocaleString();
+        document.getElementById('dispRank').innerText = state.rank;
+        document.getElementById('dayCount').innerText = state.day + 1;
+
+        if(state.phase === 1 && state.day >= CONFIG.maxDaysPhase1) {
+            state.phase = 2;
+            document.getElementById('controlPhase1').style.display = 'none';
+            document.getElementById('projPanel').style.display = 'block';
+            state.displayProfitUSDT = 0;
+        }
+        document.getElementById('btnUndo').style.display = historyStack.length > 0 ? "block" : "none";
+    }
+
+    function saveHistory() { historyStack.push(JSON.parse(JSON.stringify(state))); }
+
+    function runDay() {
+        if(state.day >= CONFIG.maxDaysPhase1) return;
+        saveHistory();
+        state.day++; state.team = state.day;
+        
+        if(state.team >= 30) state.rank = "VIP 2";
+        else if(state.team >= 5) state.rank = "VIP 1";
+
+        let rate = (parseFloat(document.getElementById('inpProfit').value) || 0.85) / 100;
+        for(let i=0; i<state.signals; i++) state.balance *= (1 + rate);
+        
+        if(state.day === 5) state.balance += 70;
+        if(state.day === 30) state.balance += 100;
+
+        addLog(state.day, "Profit Trading", state.signals, state.balance);
+        updateUI();
+    }
+
+    function runProjection() {
+        let d = parseInt(document.getElementById('inpDays').value) || 0;
+        if(d <= 0) return;
+        saveHistory();
+        let old = state.balance;
+        let rate = (parseFloat(document.getElementById('inpProfit').value) || 0.85) / 100;
+        state.balance *= Math.pow((1 + rate), d * 3);
+        state.day += d;
+        state.displayProfitUSDT = state.balance - old;
+        addLog(state.day, "Proyeksi " + d + " Hari", 3, state.balance, true);
+        updateUI();
+    }
+
+    function undo() {
+        if(historyStack.length === 0) return;
+        state = historyStack.pop();
+        if(state.day < CONFIG.maxDaysPhase1) {
+            state.phase = 1;
+            document.getElementById('controlPhase1').style.display = 'block';
+            document.getElementById('projPanel').style.display = 'none';
+        }
+        document.getElementById('logList').removeChild(document.getElementById('logList').firstChild);
+        updateUI();
+    }
+
+    function addLog(day, msg, sig, bal, isProj = false) {
+        const div = document.createElement('div');
+        div.className = 'log-item';
+        div.innerHTML = `
+            <div class="log-day">${day}</div>
+            <div class="log-content">
+                <div style="${isProj ? 'color:var(--green)' : ''}">${msg}</div>
+                <div>${sig} Sinyal Harian</div>
+            </div>
+            <div class="log-val">${bal.toLocaleString(undefined, {maximumFractionDigits: 0})}</div>
+        `;
+        document.getElementById('logList').insertBefore(div, document.getElementById('logList').firstChild);
+    }
+    updateUI();
+</script>
+</body>
+</html>
